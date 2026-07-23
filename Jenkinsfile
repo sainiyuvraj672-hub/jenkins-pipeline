@@ -1,45 +1,79 @@
 pipeline {
+
     agent any
 
     stages {
-        stage('hello') {
+
+        stage('Checkout Jenkinsfile') {
             steps {
-                sh 'echo "Hello im $(hostname), were here to perform some thing from the github."'
+                echo "Pipeline Started"
+            }
+        }
+        
+        stage('Clone Ansible Repo') {
+        steps {
+
+        sh '''
+        git clone https://github.com/sainiyuvraj672-hub/practice-ansible.git
+        '''
+
+    }
+}
+
+        stage('Clone Static Repo') {
+            steps {
+
+        sh '''
+        git clone https://github.com/sainiyuvraj672-hub/static.git
+        '''
+
+    }
+}
+
+        stage('Deploy using Ansible') {
+            steps {
+
             }
         }
 
-        stage('script execution') {
-            steps {
-                sh 'chmod +x script.sh'
-                sh 'bash script.sh'
-            }
-        }
+        stage('Verify') {
+    steps {
 
-        stage('Finish') {
-            steps {
-                echo "Pipeline done"
-            }
-        }
+        sh '''
+        pwd
 
-        stage('make file') {
-            steps {
-                // sh 'touch /root/file-pipeline.txt'
-                // sh 'echo "hello yuvzie!!"> /root/file-pipeline.txt'
-                sh 'touch file-pipeline.txt'
-                sh 'echo "Hello Yuvzie!!" > file-pipeline.txt'
-            }
-        }
+        echo "Workspace"
+
+        ls -la
+
+        echo "Ansible Repo"
+
+        ls -la practice-ansible
+
+        echo "Static Repo"
+
+        ls -la static
+        '''
+
+    }
+}
+
     }
 
     post {
+
         always {
-            echo "Alway Executes."
+            echo "Pipeline Finished"
         }
+
         success {
-            echo "Pipeline executed sucessfully"
+            echo "Deployment Successful"
         }
+
         failure {
-            echo "Pipeline execution failed"
+            echo "Deployment Failed"
         }
+
     }
+
 }
