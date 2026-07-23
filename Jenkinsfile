@@ -29,8 +29,15 @@ pipeline {
 
     }
 }
+        stage('Copy Static into Ansible Repo')
+        steps{
+            sh '''
+            cp static/* practice-ansible/
+            echo "After Copy"
 
-        
+            ls -la practice-ansible
+            '''
+        }
         stage('Verify') {
     steps {
 
@@ -52,6 +59,34 @@ pipeline {
 
     }
 }
+
+
+
+stage('Copy files to Ansible Server') {
+    steps{
+        sh '''
+        scp -r practice-ansible/* root@192.168.29.243:/root/ansible/
+        '''
+    }
+}
+
+// stage('Run Ansible Playbook') {
+//     steps{
+//         sh ''' 
+//          ssh root@192.168.29.243 \
+//         "cd /root/ansible/non-root-playbook && ansible-playbook -i inventory setup.yml"
+//         '''
+//     }
+// }
+
+// stage('Verify Deployment') {
+//     steps{
+//         '''
+//         ssh root@192.168.29.243 \
+//         "cd /root/non-root-playbook"
+//         '''
+//     }
+// }
 
     }
 
