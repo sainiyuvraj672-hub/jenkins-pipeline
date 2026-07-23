@@ -1,5 +1,4 @@
 pipeline {
-
     agent any
 
     stages {
@@ -11,99 +10,84 @@ pipeline {
         }
         
         stage('Clone Ansible Repo') {
-        steps {
-
-        sh '''
-        git clone https://github.com/sainiyuvraj672-hub/practice-ansible.git
-        '''
-
-    }
-}
+            steps {
+                sh '''
+                git clone https://github.com/sainiyuvraj672-hub/practice-ansible.git
+                '''
+            }
+        }
 
         stage('Clone Static Repo') {
             steps {
-
-        sh '''
-        git clone https://github.com/sainiyuvraj672-hub/static.git
-        '''
-
-    }
-}
-        stage('Copy Static into Ansible Repo')
-        steps{
-            sh '''
-            cp static/* practice-ansible/
-            echo "After Copy"
-
-            ls -la practice-ansible
-            '''
+                sh '''
+                git clone https://github.com/sainiyuvraj672-hub/static.git
+                '''
+            }
         }
+
+        stage('Copy Static into Ansible Repo') {
+            steps {
+                sh '''
+                cp static/* practice-ansible/
+                echo "After Copy"
+                ls -la practice-ansible
+                '''
+            }
+        }
+
         stage('Verify') {
-    steps {
+            steps {
+                sh '''
+                pwd
+                echo "Workspace"
+                ls -la
 
-        sh '''
-        pwd
+                echo "Ansible Repo"
+                ls -la practice-ansible
 
-        echo "Workspace"
+                echo "Static Repo"
+                ls -la static
+                '''
+            }
+        }
 
-        ls -la
+        stage('Copy files to Ansible Server') {
+            steps {
+                sh '''
+                scp -r practice-ansible/* root@192.168.29.243:/root/ansible/
+                '''
+            }
+        }
 
-        echo "Ansible Repo"
+        // stage('Run Ansible Playbook') {
+        //     steps {
+        //         sh ''' 
+        //         ssh root@192.168.29.243 \
+        //         "cd /root/ansible/non-root-playbook && ansible-playbook -i inventory setup.yml"
+        //         '''
+        //     }
+        // }
 
-        ls -la practice-ansible
-
-        echo "Static Repo"
-
-        ls -la static
-        '''
-
-    }
-}
-
-
-
-stage('Copy files to Ansible Server') {
-    steps{
-        sh '''
-        scp -r practice-ansible/* root@192.168.29.243:/root/ansible/
-        '''
-    }
-}
-
-// stage('Run Ansible Playbook') {
-//     steps{
-//         sh ''' 
-//          ssh root@192.168.29.243 \
-//         "cd /root/ansible/non-root-playbook && ansible-playbook -i inventory setup.yml"
-//         '''
-//     }
-// }
-
-// stage('Verify Deployment') {
-//     steps{
-//         '''
-//         ssh root@192.168.29.243 \
-//         "cd /root/non-root-playbook"
-//         '''
-//     }
-// }
+        // stage('Verify Deployment') {
+        //     steps {
+        //         sh '''
+        //         ssh root@192.168.29.243 \
+        //         "cd /root/non-root-playbook"
+        //         '''
+        //     }
+        // }
 
     }
 
     post {
-
         always {
             echo "Pipeline Finished"
         }
-
         success {
             echo "Deployment Successful"
         }
-
         failure {
             echo "Deployment Failed"
         }
-
     }
-
 }
