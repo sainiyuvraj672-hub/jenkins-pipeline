@@ -3,6 +3,15 @@ pipeline {
 
     stages {
 
+        stage('Clean Workspace') {
+            steps {
+        sh '''
+        rm -rf practice-ansible
+        rm -rf static
+        '''
+    }
+}
+
         stage('Checkout Jenkinsfile') {
             steps {
                 echo "Pipeline Started"
