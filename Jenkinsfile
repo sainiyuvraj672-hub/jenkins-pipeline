@@ -30,12 +30,7 @@ pipeline {
     }
 }
 
-        stage('Deploy using Ansible') {
-            steps {
-
-            }
-        }
-
+        
         stage('Verify') {
     steps {
 
