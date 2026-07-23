@@ -2,13 +2,27 @@ pipeline {
     agent any
 
     stages {
-        stage('Hello') {
+        stage('hello') {
             steps {
-                echo 'Hello World'
+                sh 'echo "Hello im $(hostname), were here to perform some thing from the github."'
             }
         }
+
+        stage('script execution') {
+            steps {
+                sh 'chmod +x script.sh'
+                sh 'bash script.sh'
+            }
+        }
+
+        stage('Finish') {
+            steps {
+                echo "Pipeline done"
+            }
+        }
+
         stage('make file') {
-            steps{
+            steps {
                 // sh 'touch /root/file-pipeline.txt'
                 // sh 'echo "hello yuvzie!!"> /root/file-pipeline.txt'
                 sh 'touch file-pipeline.txt'
@@ -16,14 +30,15 @@ pipeline {
             }
         }
     }
-    post{
-        always{
+
+    post {
+        always {
             echo "Alway Executes."
         }
-        success{
+        success {
             echo "Pipeline executed sucessfully"
         }
-        failure{
+        failure {
             echo "Pipeline execution failed"
         }
     }
