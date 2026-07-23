@@ -68,23 +68,23 @@ pipeline {
             }
         }
 
-        // stage('Run Ansible Playbook') {
-        //     steps {
-        //         sh ''' 
-        //         ssh root@192.168.29.243 \
-        //         "cd /root/ansible/non-root-playbook && ansible-playbook -i inventory setup.yml"
-        //         '''
-        //     }
-        // }
+        stage('Run Ansible Playbook') {
+            steps {
+                sh ''' 
+                ssh root@192.168.29.243 \
+                "cd /root/ansible && ansible-playbook -i inventory setup.yml"
+                '''
+            }
+        }
 
-        // stage('Verify Deployment') {
-        //     steps {
-        //         sh '''
-        //         ssh root@192.168.29.243 \
-        //         "cd /root/non-root-playbook"
-        //         '''
-        //     }
-        // }
+        stage('Verify Deployment') {
+            steps {
+                sh '''
+                ssh root@192.168.29.243 \
+                "cd /root/ansible"
+                '''
+            }
+        }
 
     }
 
