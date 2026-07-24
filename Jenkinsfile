@@ -34,6 +34,12 @@ pipeline {
             }
         }
 
+        stage('Archive Website') {
+    steps {
+        archiveArtifacts artifacts: 'static/*', fingerprint: true
+    }
+}
+
         stage('Copy Static into Ansible Repo') {
             steps {
                 sh '''
