@@ -14,6 +14,7 @@ pipeline {
 
         stage('Checkout Jenkinsfile') {
             steps {
+                echo "Hello from $(hostname)"
                 echo "Pipeline Started"
             }
         }
