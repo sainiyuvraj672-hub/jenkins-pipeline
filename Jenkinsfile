@@ -9,8 +9,8 @@ pipeline {
         rm -rf practice-ansible
         rm -rf static
         '''
-    }
-}
+            }
+        }
 
         stage('Checkout Jenkinsfile') {
             steps {
